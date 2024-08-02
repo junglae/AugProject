@@ -49,6 +49,33 @@ UAssetTablePrimaryDataAsset* AAssetPrimaryHandler::GetTablePrimaryData()
 	return ItemPrimaryData;
 }
 
+void AAssetPrimaryHandler::BeginAsset()
+{
+	// 에셋관련
+	FAssetDataTableRow* AssetTable = ItemPrimaryData->AssetDatatable->FindRow<FAssetDataTableRow>(AssetRowNames[0], TEXT(""));
+	if (AssetTable)
+	{
+		UStaticMesh* NewMesh = AssetTable->StaticMeshData;
+
+		Instance->SetStaticMesh(NewMesh);
+
+		// 위젯에 대한 값을 받으면 끝
+		// 옵저버에서 계속 갱신하고 값을 넘겨주면 됨
+	}
+}
+
+void AAssetPrimaryHandler::BeginSource()
+{
+	// 자원 관련
+	FSourceDataTableRow* SourceTable = ItemPrimaryData->SourceDatatable->FindRow<FSourceDataTableRow>(SourceNames[0], TEXT(""));
+	if (SourceTable)
+	{
+		int32 Source1 = SourceTable->PublicSource1;
+		Instance->SetPublicSource(Source1);
+	}
+
+}
+
 void AAssetPrimaryHandler::BeginWidget()
 {
 	// 위젯 관련
@@ -63,6 +90,7 @@ void AAssetPrimaryHandler::BeginWidget()
 		// 위젯에 대한 값을 받으면 끝
 		// 옵저버에서 계속 갱신하고 값을 넘겨주면 됨
 		WidgettTable->UserWidgetData.UserWidgetData;
+		
 		UUserWidget* UserWidget = CreateWidget<UUserWidget>(GetWorld(), WidgettTable->UserWidgetData.UserWidgetData);
 		if (!UserWidget)
 		{
@@ -101,33 +129,15 @@ void AAssetPrimaryHandler::PostInitializeComponents()
 
 	if (ItemPrimaryData)
 	{
-		TArray<FName> AssetRowNames = ItemPrimaryData->AssetDatatable->GetRowNames();
-		TArray<FName> SourceNames = ItemPrimaryData->SourceDatatable->GetRowNames();
-		 WidgetNames = ItemPrimaryData->WidgetDatatable->GetRowNames();
-
-		// 에셋관련
-		FAssetDataTableRow* AssetTable = ItemPrimaryData->AssetDatatable->FindRow<FAssetDataTableRow>(AssetRowNames[0], TEXT(""));
-		if (AssetTable)
-		{
-			UStaticMesh* NewMesh = AssetTable->StaticMeshData;
-
-			 Instance->SetStaticMesh(NewMesh);
-
-			// 위젯에 대한 값을 받으면 끝
-			// 옵저버에서 계속 갱신하고 값을 넘겨주면 됨
-		}
-
-		// 자원 관련
-		FSourceDataTableRow* SourceTable = ItemPrimaryData->SourceDatatable->FindRow<FSourceDataTableRow>(SourceNames[0], TEXT(""));
-		if (SourceTable)
-		{
-			int32 Source1 = SourceTable->PublicSource1;
-			Instance->SetPublicSource(Source1);
-		}
-
-		BeginWidget();
-
+		AssetRowNames = ItemPrimaryData->AssetDatatable->GetRowNames();
+		SourceNames = ItemPrimaryData->SourceDatatable->GetRowNames();
+		WidgetNames = ItemPrimaryData->WidgetDatatable->GetRowNames();
 	}
+
+	BeginAsset();
+	BeginSource();
+	BeginWidget();
+
 }
 
 void AAssetPrimaryHandler::BeginDestroy()

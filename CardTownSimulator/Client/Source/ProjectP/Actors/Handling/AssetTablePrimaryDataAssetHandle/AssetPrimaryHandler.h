@@ -43,7 +43,10 @@ public:
 
 	class UAssetTablePrimaryDataAsset* GetTablePrimaryData();
 
+
 public:
+	void BeginAsset();
+	void BeginSource();
 	void BeginWidget();
 
 private:
@@ -58,6 +61,8 @@ private:
 	static AAssetPrimaryHandler* Instance;
 	UAssetTablePrimaryDataAsset* ItemPrimaryData;
 
+	TArray<FName> AssetRowNames;
+	TArray<FName> SourceNames;
 	TArray<FName> WidgetNames;
 };
 
