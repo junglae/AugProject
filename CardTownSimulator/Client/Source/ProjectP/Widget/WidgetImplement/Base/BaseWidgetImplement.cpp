@@ -3,11 +3,9 @@
 
 #include "BaseWidgetImplement.h"
 #include "../../../Actors/Handling/AssetTablePrimaryDataAssetHandle/AssetPrimaryHandler.h"
-#include "../../../Observer/Implement/ObserverImplement.h"
 
-void UBaseWidgetImplement::Activation()
+void UBaseWidgetImplement::Acdtivation()
 {
-	ObserverImplement->Updata_Widget(this);
 }
 
 void UBaseWidgetImplement::NativeConstruct()
@@ -17,11 +15,9 @@ void UBaseWidgetImplement::NativeConstruct()
 
 }
 
-
 void UBaseWidgetImplement::InitWidget()
 {
-
-	ObserverImplement = AObserverImplement::GetInstance();
-	ObserverImplement->AddSubscribe_Widget(this);
+	AAssetPrimaryHandler* AssetPrimaryHandler = AAssetPrimaryHandler::GetInstance();
+	AssetPrimaryHandler->BeginWidget();
 
 }

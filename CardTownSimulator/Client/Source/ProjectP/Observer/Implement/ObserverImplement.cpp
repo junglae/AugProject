@@ -3,7 +3,6 @@
 
 #include "ObserverImplement.h"
 #include "../SubscribeList/SubscribeList.h"
-#include "../../Widget/WidgetImplement/Base/BaseWidgetImplement.h"
 
 // Sets default values
 AObserverImplement::AObserverImplement()
@@ -17,17 +16,7 @@ AObserverImplement::AObserverImplement()
 void AObserverImplement::BeginPlay()
 {
 	Super::BeginPlay();
-	GetInstance();
 	
-}
-
-void AObserverImplement::BeginDestroy()
-{
-	Super::BeginDestroy();
-	if (Instance != nullptr)
-	{
-		Instance = nullptr;
-	}
 }
 
 // Called every frame
@@ -54,37 +43,10 @@ void AObserverImplement::AddSubscribe(AObserverImplement* InSubscribe)
 void AObserverImplement::DeleteSubscribe(AObserverImplement* InSubscribe)
 {
 	int32 Index = SubscribeArray.IndexOfByKey(InSubscribe);
-	if (Index != NULL)
+	if (Index == NULL)
 	{
 		SubscribeArray.RemoveAt(Index);
 	}
-}
-
-void AObserverImplement::Updata_Widget(UUserWidget* InSubscribe)
-{
-	UBaseWidgetImplement* BaseWidget = Cast<UBaseWidgetImplement>(InSubscribe);
-	BaseWidget->Passive();
-
-	/*for (UUserWidget* InWidget : SubscribeArray_Widget)
-	{
-		UBaseWidgetImplement* BaseWidget = Cast<UBaseWidgetImplement>(InWidget);
-		BaseWidget->Passive();
-	}*/
-}
-
-void AObserverImplement::AddSubscribe_Widget(UUserWidget* InSubscribe)
-{
-	SubscribeArray_Widget.Add(InSubscribe);
-}
-
-void AObserverImplement::DeleteSubscribe_Widget(UUserWidget* InSubscribe)
-{
-	if (!SubscribeArray_Widget.Contains(InSubscribe))
-	{
-		return;
-	}
-	int32 Index = SubscribeArray_Widget.IndexOfByKey(InSubscribe);
-	SubscribeArray_Widget.RemoveAt(Index);
 }
 
 

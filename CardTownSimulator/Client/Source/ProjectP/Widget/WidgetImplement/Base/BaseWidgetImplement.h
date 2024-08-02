@@ -15,19 +15,15 @@ class PROJECTP_API UBaseWidgetImplement : public UUserWidget, public IBaseWidget
 {
 	GENERATED_BODY()
 
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "WidgetStart")
-	virtual void Activation();
-	UFUNCTION(BlueprintImplementableEvent, Category = "WidgetImple")
-	void Passive();
+	virtual void Acdtivation();
+
 	void NativeConstruct() override;
-	//void NativeDestruct() override;
 
 
 public:
 	void InitWidget();
-
-private:
-	class AObserverImplement* ObserverImplement;
 
 };
