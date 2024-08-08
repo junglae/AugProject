@@ -13,9 +13,7 @@
 
 void UBaseWidgetImplement::Activation(FBaseStruct InStruct)
 {
-	EventGameInstanceSubsystem->FindWidget(this->GetName());
-	EventGameInstanceSubsystem->LoadDataTable(InStruct);
-	
+
 	CreateSource();
 }
 
@@ -110,4 +108,14 @@ void UBaseWidgetImplement::CreateSource()
 void UBaseWidgetImplement::DestorySource(FBuildingDataTableRow* InSource)
 {
 	// @TODO 선택 또는 특정 타입의 건물이 맞는지 확인하여 그 정보를 초기화
+}
+
+UBaseWidgetImplement* UBaseWidgetImplement::GetBaseWidgetImplement()
+{
+	return BaseWidgetImplement;
+}
+
+void UBaseWidgetImplement::EventProduction(AActor* InActor)
+{
+
 }
