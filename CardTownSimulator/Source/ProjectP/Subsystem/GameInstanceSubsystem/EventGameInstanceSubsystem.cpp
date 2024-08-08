@@ -5,7 +5,13 @@
 #include "Engine/AssetManager.h"
 #include "Engine/DataTable.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
+#include "../../Actors/PointPosition/PointPositionActor.h"
 #include "../../Subsystem/DataTableRow/BaseStructDataTable.h"
 #include "../PrimaryDataAsset/AssetTablePrimaryDataAsset.h"
 #include "../../Widget/WidgetImplement/Base/BaseWidgetImplement.h"
@@ -15,6 +21,7 @@ void UEventGameInstanceSubsystem::Initialize(FSubsystemCollectionBase& Collectio
 	Super::Initialize(Collection);
 
 	InitializeAssetManager();
+
 
 	AssetTable = GetAssetDataTable();
 	SourceTable = GetSourceDataTable();
@@ -153,6 +160,140 @@ void UEventGameInstanceSubsystem::BeginBulidingData()
 			continue;
 		}
 	}
+}
+
+void UEventGameInstanceSubsystem::Active_Implementation()
+{
+	CreateSource();
+
+}
+
+void UEventGameInstanceSubsystem::CreateSource()
+{
+
+	UWorld* World = GetWorld();
+	if (!World)
+	{
+		return;
+	}
+	GetPositionActorArray(World);
+
+	if (FoundActor.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ActorArray"));
+		return;
+	}
+	FSourceDataTableRow* SourceDataTableRow = GetSourceDataTable();
+	if (!SourceDataTableRow)
+	{
+		return;
+	}
+	TSubclassOf<AActor> ActortoSpawn = SourceDataTableRow->ActorToSpawn;
+	if (!ActortoSpawn)
+	{
+		return;
+	}
+
+	int32 RandomInt = FMath::RandRange(0, FoundActor.Num() - 1);
+	if (RandomInt <= -1)
+	{
+		return;
+	}
+	// 함수 불러오기 테스트
+
+
+	FVector Location = FoundActor[RandomInt]->GetActorLocation();
+	FRotator Rotation = FRotator::ZeroRotator;
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	AActor* Actor = World->SpawnActor<AActor>(ActortoSpawn, Location, Rotation, SpawnParameters);
+	MoveActor(Actor);
+	FoundActor.RemoveAt(RandomInt);
+}
+
+void UEventGameInstanceSubsystem::FindFunction()
+{
+	APlayerController* PlayerContoller = GetWorld()->GetFirstPlayerController();
+	FName FunctionName = FName("Send Card Usage");
+	UFunction* Function = PlayerContoller->FindFunction(FunctionName);
+	if (Function)
+	{
+		PlayerContoller->ProcessEvent(Function, 0);
+	}
+}
+
+void UEventGameInstanceSubsystem::MoveActor(AActor* InActor)
+{
+	FVector OutGroundLocation;
+	FVector StartLocation = InActor->GetActorLocation();
+	GetGroundLoactionReverser(StartLocation, OutGroundLocation, InActor);
+	UpMoveActor(StartLocation, OutGroundLocation, InActor);
+}
+
+bool UEventGameInstanceSubsystem::GetGroundLoactionReverser(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor)
+{
+
+	FHitResult HitResult;
+	FVector EndLocation = StartLocation;
+	EndLocation.Z += 10000.f;
+	FCollisionQueryParams CollisionQueryParams;
+	CollisionQueryParams.AddIgnoredActor(InActor);
+	
+	bool bHit = InActor->GetWorld()->LineTraceSingleByChannel(
+		HitResult, 
+		StartLocation, 
+		EndLocation, 
+		ECC_WorldStatic, 
+		CollisionQueryParams);
+	
+	if (bHit)
+	{
+		OutGroundLoaction = HitResult.Location;
+	}
+	
+	return bHit;
+}
+
+void UEventGameInstanceSubsystem::UpMoveActor(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor)
+{
+	float DeltaTime = GetWorld()->GetDeltaSeconds();
+	float MoveSpeed = 100.f;
+
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	UWorld* World = GetWorld();
+	if (!TimerManager.IsTimerActive(TimerHandle))
+	{
+		FTimerDelegate TimerDelegate;
+		TimerDelegate.BindUFunction(this, FName("UpMoveActor"), StartLocation, OutGroundLoaction, InActor);
+		TimerManager.SetTimer(TimerHandle, TimerDelegate, .01f, true);
+		UNiagaraSystem* NiagaraSystemeffect = SourceTable->NiagaraSystem;
+		UNiagaraComponent* NiagaraComponent =  UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraSystemeffect, OutGroundLoaction);
+		//NiagaraSystemArray.Add(NiagaraComponent);
+	}
+
+	FVector CurrentLocation = InActor->GetActorLocation();
+	CurrentLocation.Z +=  MoveSpeed * DeltaTime;
+	
+	InActor->SetActorLocation(CurrentLocation);
+
+	if (CurrentLocation.Z >= OutGroundLoaction.Z+ 1) //FMath::Abs(CurrentLocation .Z- OutGroundLoaction.Z) < KINDA_SMALL_NUMBER)
+	{
+		FVector OffsetLoaction = (CurrentLocation - (CurrentLocation - OutGroundLoaction)) + 5;
+		InActor->SetActorLocation(OffsetLoaction);
+		TimerManager.ClearTimer(TimerHandle);
+		//NiagaraSystemArray[0]->Deactivate();
+	}
+
+}
+
+TArray<AActor*> UEventGameInstanceSubsystem::GetPositionActorArray(UWorld* World)
+{
+	if (FoundActor.IsEmpty())
+	{
+		UGameplayStatics::GetAllActorsOfClass(World, APointPositionActor::StaticClass(), FoundActor);
+
+	}
+	return FoundActor;
 }
 
 void UEventGameInstanceSubsystem::StartSeq(FBaseStruct InMainTable)

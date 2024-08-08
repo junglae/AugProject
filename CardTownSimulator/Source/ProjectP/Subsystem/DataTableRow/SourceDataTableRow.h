@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "NiagaraComponent.h"
 #include "SourceDataTableRow.generated.h"
 
 /**
@@ -30,5 +31,8 @@ public:
 	TSubclassOf<AActor> ActorToSpawn;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
 	TSubclassOf<AActor> ActorToDestory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
+	UNiagaraSystem* NiagaraSystem;
 
 };
