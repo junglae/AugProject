@@ -42,15 +42,17 @@ public:
 	void CreateSource();
 	void DestorySource(FBuildingDataTableRow* InSource);
 
-	
+	UBaseWidgetImplement* GetBaseWidgetImplement();
 
 public:
-	
+	void EventProduction(AActor* InActor);
 
 private:
 	class AObserverImplement* ObserverImplement;
 	class UEventGameInstanceSubsystem* EventGameInstanceSubsystem;
 	
 	TArray<AActor*> FoundActor; // 배열보단 삽입, 삭제가 좋은 트리가 좋아보이긴함
+
+	UBaseWidgetImplement* BaseWidgetImplement;
 
 };

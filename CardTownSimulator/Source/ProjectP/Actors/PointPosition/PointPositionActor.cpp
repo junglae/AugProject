@@ -17,8 +17,7 @@ APointPositionActor::APointPositionActor()
 void APointPositionActor::BeginPlay()
 {
 	Super::BeginPlay();
-	//FindActorsPosition();
-
+	//GetActorPositionArray();
 }
 
 // Called every frame

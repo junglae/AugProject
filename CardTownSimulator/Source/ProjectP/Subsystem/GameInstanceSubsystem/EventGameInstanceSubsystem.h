@@ -45,6 +45,8 @@ public:
 
 	void FindWidget(FString InName);
 
+	
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void BeginAsset();
@@ -54,6 +56,23 @@ public:
 	void BeginWidget();
 	UFUNCTION(BlueprintCallable)
 	void BeginBulidingData();
+
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void Active();
+	void Active_Implementation();
+
+	UFUNCTION(BlueprintCallable)
+	void CreateSource();
+	UFUNCTION(BlueprintCallable)
+	void FindFunction();
+
+	UFUNCTION(BlueprintCallable)
+	void MoveActor(AActor* InActor);
+	bool GetGroundLoactionReverser(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor);
+	UFUNCTION()
+	void UpMoveActor(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor);
+	TArray<AActor*> GetPositionActorArray(UWorld* World);
+
 
 public:
 	// 분류 시퀀스
@@ -86,5 +105,11 @@ private:
 	int32 PrivateSource1 = 0;
 
 	UStaticMesh* AssetMesh;
+
+	TArray<AActor*> FoundActor; // 배열보단 삽입, 삭제가 좋은 트리가 좋아보이긴함
+
+	FTimerHandle TimerHandle;
+
+	TArray<class UNiagaraComponent*> NiagaraSystemArray;
 
 };
