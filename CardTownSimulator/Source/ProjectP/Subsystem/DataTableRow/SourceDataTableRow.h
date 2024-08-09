@@ -19,13 +19,13 @@ struct PROJECTP_API FSourceDataTableRow : public FTableRowBase
 public:
 	// 공유 자원 관련 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PublicSource")
-	int32 PublicSource1;
+	int32 PublicSource1 = NULL;
 
 	// 개인 자원 관련
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PrivateSource")
-	int32 PrivateSource1;
+	int32 PrivateSource1 = NULL;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PrivateSource")
-	int32 PrivateSource2;
+	int32 PrivateSource2 = NULL;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
 	FName ActorType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
@@ -34,6 +34,6 @@ public:
 	TSubclassOf<AActor> ActorToDestory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
-	UNiagaraSystem* NiagaraSystem;
+	UNiagaraSystem* NiagaraSystem = nullptr;
 
 };

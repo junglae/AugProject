@@ -16,7 +16,7 @@ public:
 	TSubclassOf<UUserWidget> UserWidgetData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WidgetClass")
-	bool bVisable;
+	bool bVisable = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WidgetClass")
 	FString WidgetName;
