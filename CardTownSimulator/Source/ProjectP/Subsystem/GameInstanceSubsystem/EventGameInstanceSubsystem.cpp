@@ -162,6 +162,12 @@ void UEventGameInstanceSubsystem::BeginBulidingData()
 	}
 }
 
+FSourceDataTableRow* UEventGameInstanceSubsystem::SearchSourceDataTable(FName InName)
+{
+	SourceTable = ItemPrimaryData->SourceDatatable->FindRow<FSourceDataTableRow>(InName, TEXT(""));
+	return SourceTable;
+}
+
 void UEventGameInstanceSubsystem::Active_Implementation()
 {
 	CreateSource();
@@ -211,6 +217,45 @@ void UEventGameInstanceSubsystem::CreateSource()
 	FoundActor.RemoveAt(RandomInt);
 }
 
+void UEventGameInstanceSubsystem::CreateSource(FSourceDataTableRow* SourceDataTableRow, APointPositionActor* InActor)
+{
+	UWorld* World = GetWorld();
+	if (!World)
+	{
+		return;
+	}
+	GetPositionActorArray(World);
+
+	if (FoundActor.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ActorArray"));
+		return;
+	}
+	if (!SourceDataTableRow)
+	{
+		return;
+	}
+	TSubclassOf<AActor> ActortoSpawn = SourceDataTableRow->ActorToSpawn;
+	if (!ActortoSpawn)
+	{
+		return;
+	}
+
+	/*int32 RandomInt = FMath::RandRange(0, FoundActor.Num() - 1);
+	if (RandomInt <= -1)
+	{
+		return;
+	}*/
+
+
+	FVector Location = InActor->GetActorLocation(); //FoundActor[RandomInt]->GetActorLocation();
+	FRotator Rotation = FRotator::ZeroRotator;
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	AActor* Actor = World->SpawnActor<AActor>(ActortoSpawn, Location, Rotation, SpawnParameters);
+	MoveActor(Actor);
+}
+
 void UEventGameInstanceSubsystem::FindFunction()
 {
 	APlayerController* PlayerContoller = GetWorld()->GetFirstPlayerController();
@@ -220,6 +265,13 @@ void UEventGameInstanceSubsystem::FindFunction()
 	{
 		PlayerContoller->ProcessEvent(Function, 0);
 	}
+}
+
+void UEventGameInstanceSubsystem::ActorPositionSpawn(APointPositionActor* InActor)
+{
+	FSourceDataTableRow* SourceDataTableRow = SearchSourceDataTable(InActor->ActorType);
+	CreateSource(SourceDataTableRow, InActor);
+
 }
 
 void UEventGameInstanceSubsystem::MoveActor(AActor* InActor)

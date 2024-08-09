@@ -3,6 +3,7 @@
 
 #include "PointPositionActor.h"
 #include "Kismet//GameplayStatics.h"
+#include "../../Subsystem/GameInstanceSubsystem/EventGameInstanceSubsystem.h"
 
 // Sets default values
 APointPositionActor::APointPositionActor()
@@ -17,7 +18,7 @@ APointPositionActor::APointPositionActor()
 void APointPositionActor::BeginPlay()
 {
 	Super::BeginPlay();
-	//GetActorPositionArray();
+	SpawnPositionActor();
 }
 
 // Called every frame
@@ -25,6 +26,12 @@ void APointPositionActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void APointPositionActor::SpawnPositionActor()
+{
+	UEventGameInstanceSubsystem* EventGameInstanceSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEventGameInstanceSubsystem>();
+	EventGameInstanceSubsystem->ActorPositionSpawn(this);
 }
 
 void APointPositionActor::FindActorsPosition()

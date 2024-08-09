@@ -26,7 +26,8 @@ public:
 	int32 PrivateSource1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PrivateSource")
 	int32 PrivateSource2;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
+	FName ActorType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
 	TSubclassOf<AActor> ActorToSpawn;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")

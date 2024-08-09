@@ -25,6 +25,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VALUE")
 	class USceneComponent* SceneComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VALUE")
+	class UStaticMeshComponent* StaticMeshComponent;
+	UPROPERTY(EditAnywhere);
+	FName	 ActorType;
+
+	void SpawnPositionActor();
 
 public:
 	void FindActorsPosition();
@@ -32,5 +38,5 @@ public:
 private:
 
 	TArray<AActor*> ActorPositionArray;
-
+	
 };

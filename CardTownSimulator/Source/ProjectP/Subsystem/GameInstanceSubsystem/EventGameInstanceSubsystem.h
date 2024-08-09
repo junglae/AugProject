@@ -57,15 +57,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void BeginBulidingData();
 
+	FSourceDataTableRow* SearchSourceDataTable(FName InName);
+
+	/////////////////
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void Active();
 	void Active_Implementation();
 
 	UFUNCTION(BlueprintCallable)
 	void CreateSource();
+	void CreateSource(FSourceDataTableRow* SourceDataTableRow, class APointPositionActor* InActor);
 	UFUNCTION(BlueprintCallable)
 	void FindFunction();
 
+	UFUNCTION()
+	void ActorPositionSpawn(class APointPositionActor* InActor);
 	UFUNCTION(BlueprintCallable)
 	void MoveActor(AActor* InActor);
 	bool GetGroundLoactionReverser(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor);
