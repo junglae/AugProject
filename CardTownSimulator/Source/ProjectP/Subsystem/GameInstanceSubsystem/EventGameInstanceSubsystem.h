@@ -113,6 +113,7 @@ private:
 	UStaticMesh* AssetMesh;
 
 	TArray<AActor*> FoundActor; // 배열보단 삽입, 삭제가 좋은 트리가 좋아보이긴함
+	TArray<AActor*> BuildingActor;
 
 	FTimerHandle TimerHandle;
 

@@ -246,14 +246,14 @@ void UEventGameInstanceSubsystem::CreateSource(FSourceDataTableRow* SourceDataTa
 	{
 		return;
 	}*/
-
+	
 
 	FVector Location = InActor->GetActorLocation(); //FoundActor[RandomInt]->GetActorLocation();
 	FRotator Rotation = FRotator::ZeroRotator;
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	AActor* Actor = World->SpawnActor<AActor>(ActortoSpawn, Location, Rotation, SpawnParameters);
-	MoveActor(Actor);
+	BuildingActor.Add(Actor);
 }
 
 void UEventGameInstanceSubsystem::FindFunction()
@@ -271,15 +271,19 @@ void UEventGameInstanceSubsystem::ActorPositionSpawn(APointPositionActor* InActo
 {
 	FSourceDataTableRow* SourceDataTableRow = SearchSourceDataTable(InActor->ActorType);
 	CreateSource(SourceDataTableRow, InActor);
-
 }
 
 void UEventGameInstanceSubsystem::MoveActor(AActor* InActor)
 {
+	if (!BuildingActor.Contains(InActor))
+	{
+		return;
+	}
+	AActor* NewActor = *BuildingActor.FindByKey(InActor);
 	FVector OutGroundLocation;
-	FVector StartLocation = InActor->GetActorLocation();
-	GetGroundLoactionReverser(StartLocation, OutGroundLocation, InActor);
-	UpMoveActor(StartLocation, OutGroundLocation, InActor);
+	FVector StartLocation = NewActor->GetActorLocation();
+	GetGroundLoactionReverser(StartLocation, OutGroundLocation, NewActor);
+	UpMoveActor(StartLocation, OutGroundLocation, NewActor);
 }
 
 bool UEventGameInstanceSubsystem::GetGroundLoactionReverser(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor)
@@ -309,7 +313,7 @@ bool UEventGameInstanceSubsystem::GetGroundLoactionReverser(FVector StartLocatio
 void UEventGameInstanceSubsystem::UpMoveActor(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor)
 {
 	float DeltaTime = GetWorld()->GetDeltaSeconds();
-	float MoveSpeed = 100.f;
+	float MoveSpeed = 300.f;
 
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	UWorld* World = GetWorld();
@@ -320,7 +324,7 @@ void UEventGameInstanceSubsystem::UpMoveActor(FVector StartLocation, FVector& Ou
 		TimerManager.SetTimer(TimerHandle, TimerDelegate, .01f, true);
 		UNiagaraSystem* NiagaraSystemeffect = SourceTable->NiagaraSystem;
 		UNiagaraComponent* NiagaraComponent =  UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraSystemeffect, OutGroundLoaction);
-		//NiagaraSystemArray.Add(NiagaraComponent);
+		NiagaraSystemArray.Add(NiagaraComponent);
 	}
 
 	FVector CurrentLocation = InActor->GetActorLocation();
