@@ -20,10 +20,10 @@ public:
 	FText tName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BuildingData")
 	TSubclassOf<AActor> aBuildingType;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BuildingData")
+	//FVector vLocation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BuildingData")
-	FVector vLocation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BuildingData")
-	bool bCreate;
+	bool bCreate = false;
 	// @TODO 건물의 기능
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BuildingData")
 	//bool BuildingFunction;

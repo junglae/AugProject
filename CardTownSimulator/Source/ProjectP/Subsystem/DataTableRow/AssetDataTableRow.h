@@ -44,18 +44,18 @@ public:
 	FText Name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
 	FText MainDescription;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
+	//UTexture2D* Sprite;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
-	UTexture2D* Sprite;
+	int32 Cost = NULL;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
+	//ECardCategory CardCategory;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
-	int32 Cost;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
-	ECardCategory CardCategory;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
-	int32 Rarity;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
-	EJob  JobExclusive;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
-	TMap<EResource, int32> Resources;
+	int32 Rarity = NULL;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
+	//EJob  JobExclusive;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CardInfo")
+	//TMap<EResource, int32> Resources;
 
 
 	// 여기서 부터는 클라에만 적용

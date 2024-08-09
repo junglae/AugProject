@@ -275,15 +275,11 @@ void UEventGameInstanceSubsystem::ActorPositionSpawn(APointPositionActor* InActo
 
 void UEventGameInstanceSubsystem::MoveActor(AActor* InActor)
 {
-	if (!BuildingActor.Contains(InActor))
-	{
-		return;
-	}
-	AActor* NewActor = *BuildingActor.FindByKey(InActor);
+
 	FVector OutGroundLocation;
-	FVector StartLocation = NewActor->GetActorLocation();
-	GetGroundLoactionReverser(StartLocation, OutGroundLocation, NewActor);
-	UpMoveActor(StartLocation, OutGroundLocation, NewActor);
+	FVector StartLocation = InActor->GetActorLocation();
+	GetGroundLoactionReverser(StartLocation, OutGroundLocation, InActor);
+	UpMoveActor(StartLocation, OutGroundLocation, InActor);
 }
 
 bool UEventGameInstanceSubsystem::GetGroundLoactionReverser(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor)
@@ -322,9 +318,9 @@ void UEventGameInstanceSubsystem::UpMoveActor(FVector StartLocation, FVector& Ou
 		FTimerDelegate TimerDelegate;
 		TimerDelegate.BindUFunction(this, FName("UpMoveActor"), StartLocation, OutGroundLoaction, InActor);
 		TimerManager.SetTimer(TimerHandle, TimerDelegate, .01f, true);
-		UNiagaraSystem* NiagaraSystemeffect = SourceTable->NiagaraSystem;
-		UNiagaraComponent* NiagaraComponent =  UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraSystemeffect, OutGroundLoaction);
-		NiagaraSystemArray.Add(NiagaraComponent);
+		//UNiagaraSystem* NiagaraSystemeffect = SourceTable->NiagaraSystem;
+		//UNiagaraComponent* NiagaraComponent =  UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraSystemeffect, OutGroundLoaction);
+		//NiagaraSystemArray.Add(NiagaraComponent);
 	}
 
 	FVector CurrentLocation = InActor->GetActorLocation();
@@ -367,28 +363,28 @@ FClientAssetDataTableRow* UEventGameInstanceSubsystem::CheckState(FBaseStruct In
 
 void UEventGameInstanceSubsystem::bCheckStateAcquisitionSource(FClientAssetDataTableRow* InClientData)
 {
-	if (InClientData->bAcquisitionSource)
-	{
-		ChangeAcquisitionSource(InClientData);
-	}
-	else
-		return;
+	//if (InClientData->bAcquisitionSource)
+	//{
+	//	ChangeAcquisitionSource(InClientData);
+	//}
+	//else
+	//	return;
 }
 
 void UEventGameInstanceSubsystem::ChangeAcquisitionSource(FClientAssetDataTableRow* InClientData)
 {
-	if (InClientData->AcquisitionSourceInt < 0)
-	{
+	//if (InClientData->AcquisitionSourceInt < 0)
+	//{
 
-	}
-	else if (InClientData->AcquisitionSourceMax < 0)
-	{
+	//}
+	//else if (InClientData->AcquisitionSourceMax < 0)
+	//{
 
-	}
-	else if (InClientData->AcquisitionSourcePer < 0)
-	{
+	//}
+	//else if (InClientData->AcquisitionSourcePer < 0)
+	//{
 
-	}
+	//}
 }
 
 
