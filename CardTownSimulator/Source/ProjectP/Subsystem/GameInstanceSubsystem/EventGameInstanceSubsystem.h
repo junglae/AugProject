@@ -70,10 +70,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FindFunction();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "BluePrintActive")
+	void ActiveActor();
+
 	UFUNCTION()
 	void ActorPositionSpawn(class APointPositionActor* InActor);
 	UFUNCTION(BlueprintCallable)
 	void MoveActor(AActor* InActor);
+
+
 	bool GetGroundLoactionReverser(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor);
 	UFUNCTION()
 	void UpMoveActor(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor);
@@ -118,5 +123,7 @@ private:
 	FTimerHandle TimerHandle;
 
 	TArray<class UNiagaraComponent*> NiagaraSystemArray;
+	TArray<AActor*> InActorArray;
+	float MoveSpeed;
 
 };

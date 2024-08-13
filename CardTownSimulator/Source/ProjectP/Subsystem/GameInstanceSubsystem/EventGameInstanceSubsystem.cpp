@@ -275,7 +275,10 @@ void UEventGameInstanceSubsystem::ActorPositionSpawn(APointPositionActor* InActo
 
 void UEventGameInstanceSubsystem::MoveActor(AActor* InActor)
 {
-
+	if (!InActorArray.Contains(InActor))
+	{
+		InActorArray.Add(InActor);
+	}
 	FVector OutGroundLocation;
 	FVector StartLocation = InActor->GetActorLocation();
 	GetGroundLoactionReverser(StartLocation, OutGroundLocation, InActor);
@@ -309,7 +312,8 @@ bool UEventGameInstanceSubsystem::GetGroundLoactionReverser(FVector StartLocatio
 void UEventGameInstanceSubsystem::UpMoveActor(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor)
 {
 	float DeltaTime = GetWorld()->GetDeltaSeconds();
-	float MoveSpeed = 300.f;
+	FVector CurrentLocation = InActor->GetActorLocation();
+	float GoalSpeed = 5.f;
 
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	UWorld* World = GetWorld();
@@ -318,24 +322,26 @@ void UEventGameInstanceSubsystem::UpMoveActor(FVector StartLocation, FVector& Ou
 		FTimerDelegate TimerDelegate;
 		TimerDelegate.BindUFunction(this, FName("UpMoveActor"), StartLocation, OutGroundLoaction, InActor);
 		TimerManager.SetTimer(TimerHandle, TimerDelegate, .01f, true);
-		//UNiagaraSystem* NiagaraSystemeffect = SourceTable->NiagaraSystem;
-		//UNiagaraComponent* NiagaraComponent =  UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraSystemeffect, OutGroundLoaction);
-		//NiagaraSystemArray.Add(NiagaraComponent);
+		MoveSpeed = (FMath::Abs(OutGroundLoaction.Z - CurrentLocation.Z) / GoalSpeed);
 	}
-
-	FVector CurrentLocation = InActor->GetActorLocation();
-	CurrentLocation.Z +=  MoveSpeed * DeltaTime;
+	CurrentLocation.Z += MoveSpeed * DeltaTime;
 	
 	InActor->SetActorLocation(CurrentLocation);
 
-	if (CurrentLocation.Z >= OutGroundLoaction.Z+ 1) //FMath::Abs(CurrentLocation .Z- OutGroundLoaction.Z) < KINDA_SMALL_NUMBER)
+	if (CurrentLocation.Z >= OutGroundLoaction.Z+ 1)
 	{
 		FVector OffsetLoaction = (CurrentLocation - (CurrentLocation - OutGroundLoaction)) + 5;
 		InActor->SetActorLocation(OffsetLoaction);
 		TimerManager.ClearTimer(TimerHandle);
-		//NiagaraSystemArray[0]->Deactivate();
-	}
 
+		int32 ActorIndex = InActorArray.IndexOfByKey(InActor);
+		InActorArray.RemoveAt(ActorIndex);
+
+		if (!InActorArray.IsEmpty())
+		{
+			MoveActor(InActorArray[0]);
+		}
+	}
 }
 
 TArray<AActor*> UEventGameInstanceSubsystem::GetPositionActorArray(UWorld* World)
