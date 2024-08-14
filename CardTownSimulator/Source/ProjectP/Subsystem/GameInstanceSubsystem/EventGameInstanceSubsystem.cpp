@@ -30,33 +30,33 @@ void UEventGameInstanceSubsystem::Initialize(FSubsystemCollectionBase& Collectio
 
 void UEventGameInstanceSubsystem::InitializeAssetManager()
 {
-	UAssetManager& Manager = UAssetManager::Get();
+	//UAssetManager& Manager = UAssetManager::Get();
 
-	TArray<FPrimaryAssetId> Assets;
-	//하드 코딩된 부분 뺄수 있는지 확인하기
-	Manager.GetPrimaryAssetIdList(TEXT("AssetTablePrimaryDataAsset"), Assets);
+	//TArray<FPrimaryAssetId> Assets;
+	////하드 코딩된 부분 뺄수 있는지 확인하기
+	//Manager.GetPrimaryAssetIdList(TEXT("AssetTablePrimaryDataAsset"), Assets);
 
-	int32 AccessIdx = 0;
-	FSoftObjectPtr AssetPtr(Manager.GetPrimaryAssetPath(Assets[AccessIdx]));
-	if (AssetPtr.IsPending())
-	{
-		AssetPtr.LoadSynchronous();
-	}
-	ItemPrimaryData = Cast<UAssetTablePrimaryDataAsset>(AssetPtr.Get());
+	//int32 AccessIdx = 0;
+	//FSoftObjectPtr AssetPtr(Manager.GetPrimaryAssetPath(Assets[AccessIdx]));
+	//if (AssetPtr.IsPending())
+	//{
+	//	AssetPtr.LoadSynchronous();
+	//}
+	//ItemPrimaryData = Cast<UAssetTablePrimaryDataAsset>(AssetPtr.Get());
 
 
-	if (ItemPrimaryData)
-	{
-		AssetRowNames = ItemPrimaryData->AssetDatatable->GetRowNames();
-		SourceNames = ItemPrimaryData->SourceDatatable->GetRowNames();
-		WidgetNames = ItemPrimaryData->WidgetDatatable->GetRowNames();
-		BuildingNames = ItemPrimaryData->BuildingDatatable->GetRowNames();
-	}
+	//if (ItemPrimaryData)
+	//{
+	//	AssetRowNames = ItemPrimaryData->AssetDatatable->GetRowNames();
+	//	SourceNames = ItemPrimaryData->SourceDatatable->GetRowNames();
+	//	WidgetNames = ItemPrimaryData->WidgetDatatable->GetRowNames();
+	//	BuildingNames = ItemPrimaryData->BuildingDatatable->GetRowNames();
+	//}
 
-	BeginAsset();
+	/*BeginAsset();
 	BeginSource();
 	BeginWidget();
-	BeginBulidingData();
+	BeginBulidingData();*/
 
 }
 
