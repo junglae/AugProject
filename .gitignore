@@ -49,8 +49,8 @@
 
 # Binary Files
 */Binaries/*
-*/Plugins/*/Binaries/*
-*/Plugins/*/Intermediate/*
+*/Plugins/**/Binaries/*
+*/Plugins/**/Intermediate/*
 
 # Builds
 *Build/*
