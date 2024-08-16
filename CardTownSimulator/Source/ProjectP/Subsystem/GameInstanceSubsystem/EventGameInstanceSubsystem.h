@@ -70,8 +70,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FindFunction();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "BluePrintActive")
-	void ActiveActor();
 
 	UFUNCTION()
 	void ActorPositionSpawn(class APointPositionActor* InActor);
@@ -83,6 +81,13 @@ public:
 	UFUNCTION()
 	void UpMoveActor(FVector StartLocation, FVector& OutGroundLoaction, AActor* InActor);
 	TArray<AActor*> GetPositionActorArray(UWorld* World);
+
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bJoined;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bHosting;
 
 
 public:
