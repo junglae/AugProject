@@ -5,5 +5,4 @@
 
 void UBaseGameInstance::Init()
 {
-	Super::Init();
 }
